@@ -11,15 +11,18 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageFiles>$(MSBuildThisFileDirectory)..\..\artifacts\package\</PackageFiles>
     <PackageId>BeneficialStrategies.Iso20022.Primitives</PackageId>
     <PackageDescription>The ISO 20022 primitive data types, code sets and external codes, with their format validation and JSON converters, without the message records.</PackageDescription>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/release-notes.txt"))</PackageReleaseNotes>
+    <!-- The README and the release notes of a release are made by tools/package/prepare_package_files.py; without them (a local pack) the README of the repository is used. -->
+    <PackageReleaseNotes Condition="Exists('$(PackageFiles)release-notes.txt')">$([System.IO.File]::ReadAllText("$(PackageFiles)release-notes.txt"))</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="$(PackageFiles)README.md" Pack="true" PackagePath="\" Condition="Exists('$(PackageFiles)README.md')" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Condition="!Exists('$(PackageFiles)README.md')" />
     <None Include="..\..\.beneficial\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
