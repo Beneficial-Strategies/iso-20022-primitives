@@ -135,7 +135,7 @@ Console.WriteLine(Iso20022XmlSerializer.SerializeToString(mine));
 </Document>
 ```
 
-To turn those problems into FluentValidation failures instead, see [BeneficialStrategies.Iso20022.FluentValidation.Xml](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.FluentValidation.Xml).
+To turn those problems into FluentValidation failures instead, see [BeneficialStrategies.Iso20022.Validation.Xml](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Validation.Xml).
 
 Try the [project](https://github.com/Beneficial-Strategies/iso-20022-primitives/tree/main/examples/02-your-own-class-from-xml) yourself.
 
@@ -171,16 +171,16 @@ Try the [project](https://github.com/Beneficial-Strategies/iso-20022-primitives/
 It has no message definitions and depends on no other package; every other package of the family is built on it. Besides the types and the readers, it holds the small contracts the rest of the family agrees on:
 
 * **The kinds of ISO type and how to tell them apart:** `IIsoComponent`, `IIsoChoice`, `IIsoChoiceVariant`, `IOuterRecord` and the attributes (`[IsoId]`, `[IsoXmlTag]`, `[IsoMessage]`, `[IsoAmount]`); `Iso.KindOf(Type)` answers for any type of the model.
-* **`IIsoDataFactory`**, the abstraction that makes an object for an interface, which is how a reader fills an *interface* instead of a class (the [Interfaces](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Interfaces) package has the interfaces, and [Factory](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Factory) makes the objects).
+* **`IIsoDataFactory`**, the abstraction that makes an object for an interface, which is how a reader fills an *interface* instead of a class (the [Messages](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Messages) package has the interfaces, and [Factory](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Factory) makes the objects).
 * **The collection types** (`ValueList<T>`, `SimpleValueList<T>`), and the **`Iso20022MessageTypeRegistry`**, which finds a message type from a namespace or an ISO identifier.
 
 ### Where to go from here
 
 | You want | Package |
 |---|---|
-| the shape of every ISO 20022 message, component and choice, so a class of yours can stand in for one | [BeneficialStrategies.Iso20022.Interfaces](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Interfaces) |
+| the shape of every ISO 20022 message, component and choice, so a class of yours can stand in for one | [BeneficialStrategies.Iso20022.Messages](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Messages) |
 | a ready-made class for every message | [BeneficialStrategies.Iso20022](https://www.nuget.org/packages/BeneficialStrategies.Iso20022) (depends on this package; same namespaces) |
-| the rules the types cannot express, as FluentValidation validators | [BeneficialStrategies.Iso20022.FluentValidation](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.FluentValidation) |
+| the rules the types cannot express, as FluentValidation validators | [BeneficialStrategies.Iso20022.Messages.Validation](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Messages.Validation) |
 
 ### Frameworks
 
