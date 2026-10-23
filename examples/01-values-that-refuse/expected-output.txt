@@ -1,0 +1,5 @@
+Acme Corp
+Max35Text: TooLong - 'Max35Text' allows at most 35 character(s) but received 36: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.
+False
+'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}$
+'-1' is not a valid ActiveCurrencyAndAmount. ISO 20022 pattern constraint: not negative

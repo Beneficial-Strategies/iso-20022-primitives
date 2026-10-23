@@ -15,10 +15,12 @@
     <PackageDescription>The ISO 20022 primitive data types, code sets and external codes, with their format validation and JSON converters, without the message records.</PackageDescription>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/release-notes.txt"))</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\.beneficial\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 

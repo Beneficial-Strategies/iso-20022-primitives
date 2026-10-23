@@ -1,6 +1,8 @@
+![Beneficial Strategies](https://raw.githubusercontent.com/Beneficial-Strategies/iso-20022-primitives/main/.beneficial/logo.png)
+
 # BeneficialStrategies.Iso20022.Primitives
 
-The foundation of the ISO 20022 family: the **primitive data types** (text, numbers, dates, identifiers, amounts), the **code sets** and **external codes**, each refusing a value that ISO does not allow, and the **XML and JSON readers and writers** that know them. It has no message definitions at all, and depends on no other package of the family; every other package is built on it.
+The ISO 20022 primitive data types, code sets and external codes, with their format validation and JSON converters, without the message records.
 
 ## Why these are types, and not strings
 
@@ -19,19 +21,22 @@ They are assignable from strings and from the natural .NET types (a `string` to 
 ## Install
 
 ```
-dotnet add package BeneficialStrategies.Iso20022.Primitives --version 0.7.0-alpha
+dotnet add package BeneficialStrategies.Iso20022.Primitives --prerelease
 ```
 
-The packages are in alpha, so the commands name the version. Three examples, each a step further, and each using nothing but this package.
+The package is in alpha, so the command asks for a prerelease version. Three examples follow, each a step further, and each using nothing but this package.
 
-## 1. Values that refuse what ISO does not allow
+## How to use
+
+### Values that refuse what ISO does not allow
 
 A primitive type is an immutable struct that can only hold a value of its ISO format, so an invalid value cannot exist: it is refused when you build it.
 
+<!-- snippet: examples/01-values-that-refuse/Program.cs#simple -->
 ```csharp
+using BeneficialStrategies.Iso20022;
 using BeneficialStrategies.Iso20022.Amounts;
 using BeneficialStrategies.Iso20022.Codesets;
-using BeneficialStrategies.Iso20022.Framework;
 using BeneficialStrategies.Iso20022.SimpleTypes;
 
 Max35Text name = "Acme Corp";        // converts implicitly from a string; 1 to 35 characters
@@ -43,30 +48,36 @@ catch (Iso20022FormatException ex) { Console.WriteLine($"{ex.TargetType.Name}: {
 
 Console.WriteLine(Max35Text.TryCreate("", out _));      // False: no exception, when you would rather ask
 ```
+<!-- /snippet -->
 
 * **Simple types** (`Max35Text`, dates, identifiers, numbers): structs that refuse a value outside the ISO format by throwing `Iso20022FormatException`, which says which type, which value and which constraint (`ex.Violation`, `ex.Constraint`). `TryCreate` is the form that does not throw.
 * **Code sets** are enums (`ChargeBearerType1Code.Shared` is `SHAR` on the wire), and **external codes** are structs (`ActiveCurrencyCode`, `CountryCode`) that check the format of a code whose accepted values live outside the standard:
 
-  ```csharp
-  try { _ = new ActiveCurrencyCode("eur"); }
-  catch (Iso20022FormatException ex) { Console.WriteLine(ex.Message); }
-  // 'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}$
-  ```
+<!-- snippet: examples/01-values-that-refuse/Program.cs#external-code -->
+```csharp
+try { _ = new ActiveCurrencyCode("eur"); }
+catch (Iso20022FormatException ex) { Console.WriteLine(ex.Message); }
+// 'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}$
+```
+<!-- /snippet -->
 * **Amounts** are the currency-and-amount data types. Each refuses a value outside the limits of its ISO type: not negative, and at most so many digits in all and after the decimal point (18 and 5 for `ActiveCurrencyAndAmount`; trailing zeros do not count):
 
-  ```csharp
-  try { _ = new ActiveCurrencyAndAmount { Currency = "EUR", Amount = -1m }; }
-  catch (Iso20022FormatException ex) { Console.WriteLine(ex.Message); }
-  // '-1' is not a valid ActiveCurrencyAndAmount. ISO 20022 pattern constraint: not negative
-  ```
+<!-- snippet: examples/01-values-that-refuse/Program.cs#amount -->
+```csharp
+try { _ = new ActiveCurrencyAndAmount { Currency = "EUR", Amount = -1m }; }
+catch (Iso20022FormatException ex) { Console.WriteLine(ex.Message); }
+// '-1' is not a valid ActiveCurrencyAndAmount. ISO 20022 pattern constraint: not negative
+```
+<!-- /snippet -->
 
-## 2. Your own class, read from and written to XML
+Try the [project](https://github.com/Beneficial-Strategies/iso-20022-primitives/tree/main/examples/01-values-that-refuse) yourself.
+
+### Your own class, read from and written to XML
 
 The same types make the members of a class of your own, and the reader fills it from XML, telling you **every** problem it finds. A message is an `IOuterRecord` that carries four constants: its ISO identifier, the XML element that holds it and the namespace and root element of its document.
 
+<!-- snippet: examples/02-your-own-class-from-xml/MyCustomMessage.cs#message -->
 ```csharp
-using BeneficialStrategies.Iso20022.Serialization;
-
 public class MyCustomMessage : IOuterRecord
 {
     public const string IsoIdentifier = "xmpl.001.001.01";
@@ -81,9 +92,11 @@ public class MyCustomMessage : IOuterRecord
     public required ChargeBearerType1Code ChargeBearer { get; init; } // DEBT, CRED, SHAR or SLEV
 }
 ```
+<!-- /snippet -->
 
 `[IsoXmlTag]` says which element a member is read from, and `required` makes a missing element an error. Read some XML:
 
+<!-- snippet: examples/02-your-own-class-from-xml/Program.cs#read -->
 ```csharp
 var xml = "<Document xmlns=\"urn:example:xmpl.001.001.01\"><Party><Name>Acme Corp</Name><ChargeBearer>SHAR</ChargeBearer></Party></Document>";
 
@@ -95,20 +108,24 @@ else
     foreach (var issue in read.Issues)
         Console.WriteLine($"{issue.Code} {issue.Path}: {issue.Reason}");
 ```
+<!-- /snippet -->
 
-With a name of 61 characters and a charge bearer that is not a code:
+Nothing is thrown: the result is the message or the list of problems, each with the path of the element, its kind (`MalformedXml`, `WrongRoot`, `RequiredMissing`, `BadValue`, `FacetViolation`, `UnexpectedElement`, ...) and, for malformed XML, the line and position. With a name of 61 characters and a charge bearer that is not a code, the problems are:
 
 ```
 FacetViolation Document/Party/Name: 'Max35Text' allows at most 35 character(s) but received 61: 'A name that is a good deal longer than thirty-f...'.
 BadValue Document/Party/ChargeBearer: 'FREE' is not a value of ChargeBearerType1Code. Expected one of: DEBT, CRED, SHAR, SLEV.
 ```
 
-Nothing is thrown: the result is the message or the list of problems, each with the path of the element, its kind (`MalformedXml`, `WrongRoot`, `RequiredMissing`, `BadValue`, `FacetViolation`, `UnexpectedElement`, ...) and, for malformed XML, the line and position. `Iso20022XmlSerializer` also has `TryRead` for a `XDocument` and `Read` for an `XElement` (any part of a document, with a `ReadContext` when it is a fragment), `Deserialize` and `TryDeserialize` if you prefer exceptions or a `bool`, and writes a message back:
+`Iso20022XmlSerializer` also has `TryRead` for a `XDocument` and `Read` for an `XElement` (any part of a document, with a `ReadContext` when it is a fragment), `Deserialize` and `TryDeserialize` if you prefer exceptions or a `bool`, and writes a message back:
 
+<!-- snippet: examples/02-your-own-class-from-xml/Program.cs#write -->
 ```csharp
 var mine = new MyCustomMessage { Name = "Acme Corp", ChargeBearer = ChargeBearerType1Code.Shared };
 Console.WriteLine(Iso20022XmlSerializer.SerializeToString(mine));
 ```
+<!-- /snippet -->
+
 ```xml
 <Document xmlns="urn:example:xmpl.001.001.01">
   <Party>
@@ -120,30 +137,44 @@ Console.WriteLine(Iso20022XmlSerializer.SerializeToString(mine));
 
 To turn those problems into FluentValidation failures instead, see [BeneficialStrategies.Iso20022.FluentValidation.Xml](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.FluentValidation.Xml).
 
-## 3. And as JSON
+Try the [project](https://github.com/Beneficial-Strategies/iso-20022-primitives/tree/main/examples/02-your-own-class-from-xml) yourself.
+
+### The same class as JSON
 
 The same class has a JSON form, with the ISO naming (`snake_case` property names, the wire codes of the code sets):
 
+<!-- snippet: examples/03-json/Program.cs#json -->
 ```csharp
+var mine = new MyJsonMessage { Name = "Acme Corp", ChargeBearer = ChargeBearerType1Code.Shared };
+
 var json = Iso20022JsonSerializer.SerializeToString(mine);
 Console.WriteLine(json);                                         // {"name":"Acme Corp","charge_bearer":"SHAR"}
 
-Iso20022JsonSerializer.TryDeserialize<MyCustomMessage>(json, out var back, out var error);          // true: back.Name is Acme Corp
-Iso20022JsonSerializer.TryDeserialize<MyCustomMessage>("{\"name\":\"Acme Corp\",\"charge_bearer\":\"FREE\"}", out _, out error);
+var ok = Iso20022JsonSerializer.TryDeserialize<MyJsonMessage>(json, out var back, out var error);
+Console.WriteLine($"read back: {ok}, {back!.Name}");             // read back: True, Acme Corp
+Iso20022JsonSerializer.TryDeserialize<MyJsonMessage>("{\"name\":\"Acme Corp\",\"charge_bearer\":\"FREE\"}", out _, out error);
 Console.WriteLine(error!.Message);                               // Unknown ChargeBearerType1Code value: 'FREE'
 ```
+<!-- /snippet -->
 
 `TryDeserialize` never throws for bad input: a value that breaks its type is a `JsonException`, with the JSON path in its `Path`. For a class that is not a message, `Iso20022PrimitiveJsonOptions.Default` carries the converters of the primitive types, for use with `System.Text.Json` directly.
 
-## What else is in this package
+Try the [project](https://github.com/Beneficial-Strategies/iso-20022-primitives/tree/main/examples/03-json) yourself.
 
-Besides the types and the readers, this package holds the small contracts the rest of the family agrees on:
+## More
+
+* Documentation, release notes and issues: https://github.com/Beneficial-Strategies/iso-20022-primitives
+* License: MIT. Status: alpha.
+
+### What else is in this package
+
+It has no message definitions and depends on no other package; every other package of the family is built on it. Besides the types and the readers, it holds the small contracts the rest of the family agrees on:
 
 * **The kinds of ISO type and how to tell them apart:** `IIsoComponent`, `IIsoChoice`, `IIsoChoiceVariant`, `IOuterRecord` and the attributes (`[IsoId]`, `[IsoXmlTag]`, `[IsoMessage]`, `[IsoAmount]`); `Iso.KindOf(Type)` answers for any type of the model.
 * **`IIsoDataFactory`**, the abstraction that makes an object for an interface, which is how a reader fills an *interface* instead of a class (the [Interfaces](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Interfaces) package has the interfaces, and [Factory](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Factory) makes the objects).
 * **The collection types** (`ValueList<T>`, `SimpleValueList<T>`), and the **`Iso20022MessageTypeRegistry`**, which finds a message type from a namespace or an ISO identifier.
 
-## Where to go from here
+### Where to go from here
 
 | You want | Package |
 |---|---|
@@ -151,6 +182,19 @@ Besides the types and the readers, this package holds the small contracts the re
 | a ready-made class for every message | [BeneficialStrategies.Iso20022](https://www.nuget.org/packages/BeneficialStrategies.Iso20022) (depends on this package; same namespaces) |
 | the rules the types cannot express, as FluentValidation validators | [BeneficialStrategies.Iso20022.FluentValidation](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.FluentValidation) |
 
-## Frameworks
+### Frameworks
 
 net8.0, net10.0 and **netstandard2.0**, so the primitives can be used from .NET Framework 4.6.1 and later, Mono 5.4 and later, Xamarin and Unity (the records package is net8.0 and net10.0 only). The `netstandard2.0` build depends on `System.Text.Json`, `Portable.System.DateTimeOnly` (the `DateOnly` and `TimeOnly` types that `ISODate` and `ISOTime` use) and `Microsoft.Bcl.HashCode`.
+
+<!-- end of package readme -->
+
+## Building and contributing
+
+```
+dotnet build -c Release
+dotnet test -c Release
+tools/run-examples.sh              # packs the package, then builds and runs every example against it
+python3 tools/sync-readme.py       # fills the code blocks above from the examples
+```
+
+The .NET Framework 4.8 tests run on Windows only. A bug report or a change starts with an issue; a bug fix names the test that failed before it.

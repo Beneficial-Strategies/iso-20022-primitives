@@ -147,3 +147,4 @@ __pycache__/
 # Generated output and local tool settings (never committed)
 _work/
 .claude/
+artifacts/

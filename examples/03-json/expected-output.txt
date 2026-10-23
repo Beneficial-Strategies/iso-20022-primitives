@@ -1,0 +1,3 @@
+{"name":"Acme Corp","charge_bearer":"SHAR"}
+read back: True, Acme Corp
+Unknown ChargeBearerType1Code value: 'FREE'
