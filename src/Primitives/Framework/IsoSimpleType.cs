@@ -1709,5 +1709,15 @@ namespace BeneficialStrategies.Iso20022.Framework
         /// Month represented by MM (ISO 8601).
         /// </summary>
         ISOMonth,
+
+        /// <summary>
+        /// Specifies a character string with a maximum length of 65 characters.
+        /// </summary>
+        Max65Text,
+
+        /// <summary>
+        /// Rate expressed as a percentage, that is, in hundredths, for example, 0.7 is 7/10 of a percent, and 7.0 is 7% with 13 fractional digits maximum and 14 total digits.
+        /// </summary>
+        Percentage14Rate,
     }
 }
