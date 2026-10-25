@@ -27,20 +27,23 @@ public readonly struct IBANIdentifier : IIsoSimpleValue<string>, IEquatable<IBAN
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.CheckDigitMismatch"/>
+    /// when it does but its check digits are wrong (ISO 13616, MOD 97-10).
     /// </exception>
     public IBANIdentifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(IBANIdentifier), value, Pattern);
+        if (!CheckDigits.Iban(value))
+            throw Iso20022FormatException.ForCheckDigitMismatch(typeof(IBANIdentifier), value, "ISO 13616, MOD 97-10");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and its check digits (ISO 13616, MOD 97-10).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out IBANIdentifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.Iban(value))
         { result = new(value); return true; }
         result = default;
         return false;

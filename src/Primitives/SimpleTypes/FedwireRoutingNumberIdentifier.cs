@@ -27,20 +27,23 @@ public readonly struct FedwireRoutingNumberIdentifier : IIsoSimpleValue<string>,
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.CheckDigitMismatch"/>
+    /// when it does but its check digits are wrong (ABA, weights 3-7-1).
     /// </exception>
     public FedwireRoutingNumberIdentifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(FedwireRoutingNumberIdentifier), value, Pattern);
+        if (!CheckDigits.Aba(value.Substring(2)))
+            throw Iso20022FormatException.ForCheckDigitMismatch(typeof(FedwireRoutingNumberIdentifier), value, "ABA, weights 3-7-1");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and its check digits (ABA, weights 3-7-1).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out FedwireRoutingNumberIdentifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.Aba(value.Substring(2)))
         { result = new(value); return true; }
         result = default;
         return false;

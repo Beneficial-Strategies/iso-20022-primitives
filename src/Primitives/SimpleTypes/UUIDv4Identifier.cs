@@ -32,15 +32,17 @@ public readonly struct UUIDv4Identifier : IIsoSimpleValue<string>, IEquatable<UU
     public UUIDv4Identifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (!Regex.IsMatch(value, Pattern))
+        // RFC 4122: written in lower case, read in either case
+        string lower = value.ToLowerInvariant();
+        if (!Regex.IsMatch(lower, Pattern))
             throw new Iso20022FormatException(typeof(UUIDv4Identifier), value, Pattern);
-        Value = value;
+        Value = lower;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> in either case; the value is kept in lower case (RFC 4122).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out UUIDv4Identifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value.ToLowerInvariant(), Pattern))
         { result = new(value); return true; }
         result = default;
         return false;

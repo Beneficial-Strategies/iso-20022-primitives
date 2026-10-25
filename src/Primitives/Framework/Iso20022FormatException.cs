@@ -179,6 +179,14 @@ public sealed class Iso20022FormatException : FormatException
             $"'{Preview(value)}' has an invalid check digit for {targetType.Name}: " +
             $"expected '{expectedCheckDigit}' but the value supplied '{actualCheckDigit}'.");
 
+    /// <summary>
+    /// A value whose check digits (or check character) do not agree with the rest of the value, for
+    /// identifiers whose check is stated by <paramref name="rule"/> (for example "ISO 7064 MOD 97-10").
+    /// </summary>
+    public static Iso20022FormatException ForCheckDigitMismatch(Type targetType, string value, string rule) =>
+        new(targetType, value, "check digit", Iso20022FormatViolation.CheckDigitMismatch,
+            $"'{Preview(value)}' fails the {rule} check of {targetType.Name}.");
+
     // ── Helpers ──
 
     private static string Preview(string value) =>

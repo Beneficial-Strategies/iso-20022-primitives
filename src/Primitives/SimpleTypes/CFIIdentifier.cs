@@ -27,20 +27,23 @@ public readonly struct CFIIdentifier : IIsoSimpleValue<string>, IEquatable<CFIId
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.InvalidCharacter"/>
+    /// when its first letter is not a CFI category (ISO 10962).
     /// </exception>
     public CFIIdentifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(CFIIdentifier), value, Pattern);
+        if (!CheckDigits.CfiCategory(value))
+            throw Iso20022FormatException.ForInvalidCharacter(typeof(CFIIdentifier), value, "a CFI category letter (C, D, E, F, H, I, J, K, L, M, O, R, S, T) first");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and starts with a CFI category letter (ISO 10962).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out CFIIdentifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.CfiCategory(value))
         { result = new(value); return true; }
         result = default;
         return false;
