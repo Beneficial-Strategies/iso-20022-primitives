@@ -31,7 +31,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct ISOYearMonth : IIsoSimpleValue<(int Year, int Month)>, IIsoCompositeSimpleValue, IEquatable<ISOYearMonth>
 {
     /// <summary>Pattern for the lexical form: <c>YYYY-MM</c>.</summary>
-    public const string Pattern = @"^(\d{4,})-(0[1-9]|1[0-2])$";
+    public const string Pattern = @"^(\d{4,})-(0[1-9]|1[0-2])\z";
 
     /// <inheritdoc/>
     public (int Year, int Month) Value { get; }

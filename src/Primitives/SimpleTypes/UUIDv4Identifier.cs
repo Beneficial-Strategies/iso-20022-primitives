@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct UUIDv4Identifier : IIsoSimpleValue<string>, IEquatable<UUIDv4Identifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$";
+    public const string Pattern = @"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

@@ -23,7 +23,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ExternalPurposeCode_Obsolete : IIsoExternalCode, IEquatable<ExternalPurposeCode_Obsolete>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^.{1,35}$";
+    public const string Pattern = @"^.{1,35}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

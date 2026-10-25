@@ -25,7 +25,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdNormalizedString : IIsoSimpleValue<string>, IEquatable<XsdNormalizedString>
 {
     /// <summary>ISO 20022 format constraint for this type: no tab, newline, or carriage return.</summary>
-    public const string Pattern = @"^[^\t\n\r]*$";
+    public const string Pattern = @"^[^\t\n\r]*\z";
 
     /// <inheritdoc/>
     public string Value { get; }

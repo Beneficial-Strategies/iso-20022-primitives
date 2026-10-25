@@ -21,7 +21,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ISO8583ResponseCode : IIsoExternalCode, IEquatable<ISO8583ResponseCode>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^[0-9A-Z]{2}$";
+    public const string Pattern = @"^[0-9A-Z]{2}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

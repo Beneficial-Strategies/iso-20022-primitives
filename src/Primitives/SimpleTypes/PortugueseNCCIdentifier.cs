@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct PortugueseNCCIdentifier : IIsoSimpleValue<string>, IEquatable<PortugueseNCCIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^PT[0-9]{8,8}$";
+    public const string Pattern = @"^PT[0-9]{8,8}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

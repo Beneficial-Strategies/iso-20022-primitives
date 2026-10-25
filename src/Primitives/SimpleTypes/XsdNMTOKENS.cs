@@ -23,7 +23,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdNMTOKENS : IIsoSimpleValue<string>, IEquatable<XsdNMTOKENS>
 {
     /// <summary>One or more whitespace-separated xs:NMTOKEN-shaped tokens (see type remarks).</summary>
-    public const string Pattern = @"^[a-zA-Z0-9_:.\-]+(\s+[a-zA-Z0-9_:.\-]+)*$";
+    public const string Pattern = @"^[a-zA-Z0-9_:.\-]+(\s+[a-zA-Z0-9_:.\-]+)*\z";
 
     /// <inheritdoc/>
     public string Value { get; }

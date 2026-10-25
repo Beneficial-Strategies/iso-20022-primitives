@@ -28,7 +28,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct ValorenIdentifier : IIsoSimpleValue<string>, IEquatable<ValorenIdentifier>
 {
     /// <summary>Digits only, 6 to 9 characters — no check digit (see type remarks for source).</summary>
-    public const string Pattern = @"^[0-9]{6,9}$";
+    public const string Pattern = @"^[0-9]{6,9}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

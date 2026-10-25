@@ -21,7 +21,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ISO8583PINEntryCapabilityCode : IIsoExternalCode, IEquatable<ISO8583PINEntryCapabilityCode>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^[0-9]{2}$";
+    public const string Pattern = @"^[0-9]{2}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

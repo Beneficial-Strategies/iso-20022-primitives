@@ -18,7 +18,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct WertpapierIdentifier : IIsoSimpleValue<string>, IEquatable<WertpapierIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9]{6}$";
+    public const string Pattern = @"^[0-9]{6}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

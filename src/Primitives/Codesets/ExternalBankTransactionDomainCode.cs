@@ -34,7 +34,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ExternalBankTransactionDomainCode : IIsoExternalCode, IEquatable<ExternalBankTransactionDomainCode>
 {
     /// <summary>ISO 20022 format constraint — 1 to 4 characters.</summary>
-    public const string Pattern = @"^.{1,4}$";
+    public const string Pattern = @"^.{1,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

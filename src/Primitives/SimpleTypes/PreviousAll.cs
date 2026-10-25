@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct PreviousAll : IIsoSimpleValue<string>, IEquatable<PreviousAll>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^ALL$";
+    public const string Pattern = @"^ALL\z";
 
     /// <inheritdoc/>
     public string Value { get; }

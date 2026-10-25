@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct ExtensiveBranchNetworkIdentifier : IIsoSimpleValue<string>, IEquatable<ExtensiveBranchNetworkIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^AU[0-9]{6,6}$";
+    public const string Pattern = @"^AU[0-9]{6,6}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

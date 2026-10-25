@@ -25,7 +25,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdHexBinary : IIsoSimpleValue<string>, IEquatable<XsdHexBinary>
 {
     /// <summary>ISO 20022 format constraint for this type: an even number of uppercase hex digits.</summary>
-    public const string Pattern = @"^([0-9A-F]{2})*$";
+    public const string Pattern = @"^([0-9A-F]{2})*\z";
 
     /// <inheritdoc/>
     public string Value { get; }

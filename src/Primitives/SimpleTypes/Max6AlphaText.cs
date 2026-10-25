@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct Max6AlphaText : IIsoSimpleValue<string>, IEquatable<Max6AlphaText>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[a-zA-Z]{1,6}$";
+    public const string Pattern = @"^[a-zA-Z]{1,6}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

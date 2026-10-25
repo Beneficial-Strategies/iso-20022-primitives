@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ExternalCreditLineType1Code : IIsoExternalCode, IEquatable<ExternalCreditLineType1Code>
 {
     /// <summary>ISO 20022 format constraint — 1 to 4 characters.</summary>
-    public const string Pattern = @"^.{1,4}$";
+    public const string Pattern = @"^.{1,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

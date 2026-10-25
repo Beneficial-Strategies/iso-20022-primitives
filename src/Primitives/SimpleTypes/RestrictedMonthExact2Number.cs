@@ -29,7 +29,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct RestrictedMonthExact2Number : IIsoSimpleValue<int>, IIsoCompositeSimpleValue, IEquatable<RestrictedMonthExact2Number>
 {
     /// <summary>Pattern for the lexical form: exactly 2 digits, per the ISO 20022 facet.</summary>
-    public const string Pattern = @"^[0-9]{2}$";
+    public const string Pattern = @"^[0-9]{2}\z";
 
     /// <inheritdoc/>
     public int Value { get; }

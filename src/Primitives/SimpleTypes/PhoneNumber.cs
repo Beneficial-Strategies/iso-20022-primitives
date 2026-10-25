@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct PhoneNumber : IIsoSimpleValue<string>, IEquatable<PhoneNumber>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^\+[0-9]{1,3}-[0-9()+\-]{1,30}$";
+    public const string Pattern = @"^\+[0-9]{1,3}-[0-9()+\-]{1,30}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

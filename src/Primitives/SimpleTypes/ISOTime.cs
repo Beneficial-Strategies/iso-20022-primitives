@@ -46,7 +46,7 @@ public readonly struct ISOTime : IIsoSimpleValue<TimeOnly>, IIsoTimezoneQualifie
     /// Pattern for the non-timezone core of the lexical form: <c>hh:mm:ss</c>, with an optional
     /// fractional-seconds suffix. Per ISO 8601 / W3C xs:time.
     /// </summary>
-    public const string CorePattern = @"^\d{2}:\d{2}:\d{2}(\.\d+)?$";
+    public const string CorePattern = @"^\d{2}:\d{2}:\d{2}(\.\d+)?\z";
 
     /// <inheritdoc/>
     public TimeOnly Value { get; }

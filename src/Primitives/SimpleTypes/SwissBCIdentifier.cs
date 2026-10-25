@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct SwissBCIdentifier : IIsoSimpleValue<string>, IEquatable<SwissBCIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^SW[0-9]{3,5}$";
+    public const string Pattern = @"^SW[0-9]{3,5}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

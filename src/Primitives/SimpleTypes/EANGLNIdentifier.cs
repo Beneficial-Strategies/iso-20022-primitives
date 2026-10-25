@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct EANGLNIdentifier : IIsoSimpleValue<string>, IEquatable<EANGLNIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9]{13,13}$";
+    public const string Pattern = @"^[0-9]{13,13}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

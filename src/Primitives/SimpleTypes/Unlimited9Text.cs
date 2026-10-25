@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct Unlimited9Text : IIsoSimpleValue<string>, IEquatable<Unlimited9Text>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^UNLIMITED$";
+    public const string Pattern = @"^UNLIMITED\z";
 
     /// <inheritdoc/>
     public string Value { get; }

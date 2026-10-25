@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct HexBinaryText : IIsoSimpleValue<string>, IEquatable<HexBinaryText>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9a-fA-F]+$";
+    public const string Pattern = @"^[0-9a-fA-F]+\z";
 
     /// <inheritdoc/>
     public string Value { get; }

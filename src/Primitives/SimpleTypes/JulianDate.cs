@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct JulianDate : IIsoSimpleValue<string>, IEquatable<JulianDate>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9](00[1-9]|0[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|36[0-6])$";
+    public const string Pattern = @"^[0-9](00[1-9]|0[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|36[0-6])\z";
 
     /// <inheritdoc/>
     public string Value { get; }

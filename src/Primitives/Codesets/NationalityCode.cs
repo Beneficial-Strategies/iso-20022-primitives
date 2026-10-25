@@ -21,7 +21,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct NationalityCode : IIsoExternalCode, IEquatable<NationalityCode>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^.+$";
+    public const string Pattern = @"^.+\z";
 
     /// <inheritdoc/>
     public string Value { get; }

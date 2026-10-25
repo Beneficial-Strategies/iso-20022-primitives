@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct Max32HexBinaryText : IIsoSimpleValue<string>, IEquatable<Max32HexBinaryText>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^([0-9A-F][0-9A-F]){1,32}$";
+    public const string Pattern = @"^([0-9A-F][0-9A-F]){1,32}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

@@ -27,7 +27,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdName : IIsoSimpleValue<string>, IEquatable<XsdName>
 {
     /// <summary>ASCII-range approximation of the xs:Name lexical space (see type remarks).</summary>
-    public const string Pattern = @"^[a-zA-Z_:][a-zA-Z0-9_:.\-]*$";
+    public const string Pattern = @"^[a-zA-Z_:][a-zA-Z0-9_:.\-]*\z";
 
     /// <inheritdoc/>
     public string Value { get; }

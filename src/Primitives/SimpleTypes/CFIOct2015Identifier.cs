@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct CFIOct2015Identifier : IIsoSimpleValue<string>, IEquatable<CFIOct2015Identifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[A-Z]{6,6}$";
+    public const string Pattern = @"^[A-Z]{6,6}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

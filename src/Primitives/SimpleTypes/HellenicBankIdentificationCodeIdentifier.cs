@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct HellenicBankIdentificationCodeIdentifier : IIsoSimpleValue<string>, IEquatable<HellenicBankIdentificationCodeIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^GR[0-9]{7,7}$";
+    public const string Pattern = @"^GR[0-9]{7,7}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

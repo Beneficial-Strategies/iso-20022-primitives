@@ -21,7 +21,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct EuroCurrencyCode : IIsoExternalCode, IEquatable<EuroCurrencyCode>
 {
     /// <summary>ISO 20022 format constraint — the only valid value is <c>"EUR"</c>.</summary>
-    public const string Pattern = @"^EUR$";
+    public const string Pattern = @"^EUR\z";
 
     /// <inheritdoc/>
     public string Value { get; }

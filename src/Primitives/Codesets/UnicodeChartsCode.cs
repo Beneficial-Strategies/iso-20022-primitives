@@ -23,7 +23,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct UnicodeChartsCode : IIsoExternalCode, IEquatable<UnicodeChartsCode>
 {
     /// <summary>ISO 20022 format constraint — non-empty string (no length or character-class restriction is specified by the spec).</summary>
-    public const string Pattern = @"^.+$";
+    public const string Pattern = @"^.+\z";
 
     /// <inheritdoc/>
     public string Value { get; }

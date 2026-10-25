@@ -21,7 +21,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ISOMax3ALanguageCode : IIsoExternalCode, IEquatable<ISOMax3ALanguageCode>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^[a-z]{2,3}$";
+    public const string Pattern = @"^[a-z]{2,3}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

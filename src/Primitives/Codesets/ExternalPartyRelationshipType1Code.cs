@@ -23,7 +23,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ExternalPartyRelationshipType1Code : IIsoExternalCode, IEquatable<ExternalPartyRelationshipType1Code>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^.{1,4}$";
+    public const string Pattern = @"^.{1,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

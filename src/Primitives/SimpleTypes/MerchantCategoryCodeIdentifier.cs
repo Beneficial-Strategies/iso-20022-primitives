@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct MerchantCategoryCodeIdentifier : IIsoSimpleValue<string>, IEquatable<MerchantCategoryCodeIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9]{4,4}$";
+    public const string Pattern = @"^[0-9]{4,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

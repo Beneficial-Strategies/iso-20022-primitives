@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct DTI2021Identifier : IIsoSimpleValue<string>, IEquatable<DTI2021Identifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[1-9B-DF-HJ-NP-XZ][0-9B-DF-HJ-NP-XZ]{8,8}$";
+    public const string Pattern = @"^[1-9B-DF-HJ-NP-XZ][0-9B-DF-HJ-NP-XZ]{8,8}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

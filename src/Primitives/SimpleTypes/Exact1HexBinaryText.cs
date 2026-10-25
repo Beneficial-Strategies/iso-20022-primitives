@@ -24,7 +24,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct Exact1HexBinaryText : IIsoSimpleValue<string>, IEquatable<Exact1HexBinaryText>
 {
     /// <summary>ISO 20022 pattern constraint — exactly 2 uppercase hexadecimal characters.</summary>
-    public const string Pattern = @"^[0-9A-F]{2}$";
+    public const string Pattern = @"^[0-9A-F]{2}\z";
 
     /// <inheritdoc/>
     public string Value { get; }
