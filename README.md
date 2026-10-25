@@ -18,14 +18,6 @@ Three things follow, and they are the reason this is the backbone of everything 
 
 They are assignable from strings and from the natural .NET types (a `string` to a `Max35Text`, a `DateOnly` to an `ISODate`), so using them costs you nothing at the call site. What they will not do is hold a value the standard does not allow, or travel any way but the standard's. That is what makes them structs of their own, not an alias for something looser: the type **is** the specification, in the compiler and at run time, so your infrastructure can rely on the data being compatible with the international standard and ready for the rules of your business.
 
-## Install
-
-```
-dotnet add package BeneficialStrategies.Iso20022.Primitives --prerelease
-```
-
-The package is in alpha, so the command asks for a prerelease version. Three examples follow, each a step further, and each using nothing but this package.
-
 ## How to use
 
 ### Values that refuse what ISO does not allow
@@ -164,7 +156,7 @@ Try the [project](https://github.com/Beneficial-Strategies/iso-20022-primitives/
 ## More
 
 * Documentation, release notes and issues: https://github.com/Beneficial-Strategies/iso-20022-primitives
-* License: MIT. Status: alpha.
+* License: MIT. Status: stable.
 
 ### What else is in this package
 
