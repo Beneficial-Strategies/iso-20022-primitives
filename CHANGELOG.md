@@ -2,6 +2,18 @@
 
 The versions of this package have three parts, `design.breaking.compatible`: the first changes with a redesign, the second with a change that breaks existing users, the third with every other change. Newest first. Each entry is written from the issues closed since the previous release.
 
+## 1.1.1 (2026-10-25)
+
+* Added: Three more ISO 20022 types: Max65Text, Percentage14Rate and ISOMonth (#51).
+* Known issue: NPIIdentifier checks the shape of the identifier but not its two check digits (ISO 24366); the algorithm is not yet confirmed (#26).
+* Known issue: The check character of the DTI types follows a rule reconstructed from public implementations; the DTI Foundation has not yet confirmed it or the list of exceptions (#27).
+* Known issue: WertpapierIdentifier accepts digits only, while German securities codes (WKN) can contain letters (#28).
+* Known issue: BelgianIdentifier and DutchIdentifier accept any text; the national formats are not checked (#29).
+* Known issue: The IBAN types check the check digits but not the length and structure of each country (#30).
+* Known issue: The CFI types check the category letter but not the attribute letters (#31).
+* Known issue: ISOCountrySubDivisionCode refuses numeric ISO 3166-2 codes such as FR-75, because the ISO 20022 pattern allows letters only (#33).
+* Known issue: ISODate refuses the optional timezone that xs:date allows (#40).
+
 ## 1.1.0-alpha (2026-10-25)
 
 * Breaking change: XsdDouble and XsdFloat refuse Infinity and nan; only INF, -INF and NaN are special values (#11).
