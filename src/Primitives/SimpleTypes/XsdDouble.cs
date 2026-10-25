@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace BeneficialStrategies.Iso20022.SimpleTypes;
 
@@ -68,6 +69,8 @@ public readonly struct XsdDouble : IIsoSimpleValue<double>, IEquatable<XsdDouble
         return false;
     }
 
+    private static readonly Regex LexicalForm = new(@"^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$", RegexOptions.CultureInvariant);
+
     private static bool TryParseWireFormat(string text, out double result)
     {
         switch (text)
@@ -82,6 +85,12 @@ public readonly struct XsdDouble : IIsoSimpleValue<double>, IEquatable<XsdDouble
                 result = double.NaN;
                 return true;
             default:
+                // xs:double lexical space: a decimal with an optional exponent; the words of .NET ("Infinity", "nan") are not in it
+                if (!LexicalForm.IsMatch(text))
+                {
+                    result = default;
+                    return false;
+                }
                 return double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out result);
         }
     }
@@ -95,12 +104,25 @@ public readonly struct XsdDouble : IIsoSimpleValue<double>, IEquatable<XsdDouble
     /// <summary>Implicitly unwraps to the wire string representation.</summary>
     public static implicit operator string(XsdDouble v) => v.ToString();
 
+    // .NET Core writes the shortest text that reads back as the same number; .NET Framework writes too few
+    // digits, so the text is tried at more digits until it does (#15)
+    private static string Shortest(double value)
+    {
+        string text = value.ToString(CultureInfo.InvariantCulture);
+        if (double.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture) == value)
+            return text;
+        text = value.ToString("G16", CultureInfo.InvariantCulture);
+        return double.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture) == value
+            ? text
+            : value.ToString("G17", CultureInfo.InvariantCulture);
+    }
+
     /// <inheritdoc/>
     public override string ToString() =>
         double.IsPositiveInfinity(Value) ? "INF"
         : double.IsNegativeInfinity(Value) ? "-INF"
         : double.IsNaN(Value) ? "NaN"
-        : Value.ToString(CultureInfo.InvariantCulture);
+        : Shortest(Value);
     /// <inheritdoc/>
     public bool Equals(XsdDouble other) => Value.Equals(other.Value);
     /// <inheritdoc/>

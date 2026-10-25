@@ -61,6 +61,8 @@ public readonly struct ISOTime : IIsoSimpleValue<TimeOnly>, IIsoTimezoneQualifie
         TimezoneOffset = timezoneOffset;
     }
 
+    private static readonly Regex EndOfDay = new(@"^24:00:00(\.0+)?$", RegexOptions.CultureInvariant);
+
     /// <summary>
     /// Initializes by parsing the ISO 20022 ISOTime lexical form: an ISO 8601 / W3C xs:time time,
     /// optionally followed by a timezone (<c>Z</c>, <c>+HH:MM</c>, <c>-HH:MM</c>).
@@ -82,7 +84,10 @@ public readonly struct ISOTime : IIsoSimpleValue<TimeOnly>, IIsoTimezoneQualifie
         }
         if (!Regex.IsMatch(core, CorePattern))
             throw new Iso20022FormatException(typeof(ISOTime), value, "ISO 8601 \"hh:mm:ss[.sss]\" with an optional timezone");
-        // the shape is right, but the time can still be impossible (25:61:61), or 24:00:00, which a TimeOnly cannot hold
+        // 24:00:00 is the end of the day in xs:time; a TimeOnly cannot hold it, so it is read as 00:00:00 (the same time of day)
+        if (EndOfDay.IsMatch(core))
+            core = "00" + core.Substring(2);
+        // the shape is right, but the time can still be impossible (25:61:61)
         if (!TimeOnly.TryParse(core, CultureInfo.InvariantCulture, DateTimeStyles.None, out var time))
             throw new Iso20022FormatException(typeof(ISOTime), value, "a time of day: hours 00-23, minutes and seconds 00-59");
         Value = time;
