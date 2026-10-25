@@ -109,12 +109,23 @@ public readonly struct XsdDouble : IIsoSimpleValue<double>, IEquatable<XsdDouble
     private static string Shortest(double value)
     {
         string text = value.ToString(CultureInfo.InvariantCulture);
-        if (double.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture) == value)
+        if (ReadsBackAs(text, value))
             return text;
         text = value.ToString("G16", CultureInfo.InvariantCulture);
-        return double.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture) == value
-            ? text
-            : value.ToString("G17", CultureInfo.InvariantCulture);
+        return ReadsBackAs(text, value) ? text : value.ToString("G17", CultureInfo.InvariantCulture);
+    }
+
+    // .NET Framework throws for text that rounds to a value out of range, instead of returning false
+    private static bool ReadsBackAs(string text, double value)
+    {
+        try
+        {
+            return double.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture) == value;
+        }
+        catch (OverflowException)
+        {
+            return false;
+        }
     }
 
     /// <inheritdoc/>
