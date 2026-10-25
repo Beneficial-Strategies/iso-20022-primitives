@@ -18,7 +18,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct CountrySubDivisionCode : IIsoExternalCode, IEquatable<CountrySubDivisionCode>
 {
     /// <summary>ISO 20022 format constraint for this type (ISO 3166-2: CC-SSS).</summary>
-    public const string Pattern = @"^[A-Z]{2}-[0-9A-Z]{1,3}$";
+    public const string Pattern = @"^[A-Z]{2}-[0-9A-Z]{1,3}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

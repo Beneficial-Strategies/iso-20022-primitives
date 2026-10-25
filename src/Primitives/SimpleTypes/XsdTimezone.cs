@@ -32,12 +32,14 @@ internal static class XsdTimezone
         {
             var tail = text[^6..];
             if ((tail[0] == '+' || tail[0] == '-')
-                && char.IsDigit(tail[1]) && char.IsDigit(tail[2])
+                && IsAsciiDigit(tail[1]) && IsAsciiDigit(tail[2])
                 && tail[3] == ':'
-                && char.IsDigit(tail[4]) && char.IsDigit(tail[5]))
+                && IsAsciiDigit(tail[4]) && IsAsciiDigit(tail[5]))
             {
                 var hours = int.Parse(tail.Substring(1, 2), CultureInfo.InvariantCulture);
                 var minutes = int.Parse(tail.Substring(4, 2), CultureInfo.InvariantCulture);
+                if (minutes > 59)
+                    throw new FormatException($"Timezone offset '{tail}' has minutes outside 00 to 59.");
                 var magnitude = new TimeSpan(hours, minutes, 0);
                 if (magnitude > TimeSpan.FromHours(14))
                     throw new FormatException($"Timezone offset '{tail}' is outside the permitted range of -14:00 to +14:00.");
@@ -47,6 +49,8 @@ internal static class XsdTimezone
         }
         return (text, null);
     }
+
+    private static bool IsAsciiDigit(char c) => c is >= '0' and <= '9';
 
     /// <summary>Formats a timezone offset per the W3C XSD canonical lexical form.</summary>
     public static string Format(TimeSpan? offset)

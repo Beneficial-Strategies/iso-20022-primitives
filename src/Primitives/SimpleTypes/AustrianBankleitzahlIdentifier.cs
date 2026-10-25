@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct AustrianBankleitzahlIdentifier : IIsoSimpleValue<string>, IEquatable<AustrianBankleitzahlIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^AT[0-9]{5,5}$";
+    public const string Pattern = @"^AT[0-9]{5,5}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

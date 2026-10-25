@@ -36,9 +36,9 @@ public readonly struct RestrictedFINMax50Text : IIsoSimpleValue<string>, IEquata
     public RestrictedFINMax50Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINMax50Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINMax50Text), value, MaxLength);
         ValidateSlash(typeof(RestrictedFINMax50Text), value);
         Value = value;
@@ -47,7 +47,7 @@ public readonly struct RestrictedFINMax50Text : IIsoSimpleValue<string>, IEquata
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINMax50Text result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength
             && value[0] != '/' && value[^1] != '/' && !value.Contains("//"))
         { result = new(value); return true; }
         result = default;

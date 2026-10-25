@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct PolishNationalClearingCodeIdentifier : IIsoSimpleValue<string>, IEquatable<PolishNationalClearingCodeIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^PL[0-9]{8,8}$";
+    public const string Pattern = @"^PL[0-9]{8,8}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

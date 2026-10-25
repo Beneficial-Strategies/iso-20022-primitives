@@ -45,7 +45,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct RatingValueIdentifier : IIsoSimpleValue<string>, IEquatable<RatingValueIdentifier>
 {
     /// <summary>Leading uppercase letter (shared casing convention across rating agencies), then up to 4 more letters/digits/+/- (see type remarks for source).</summary>
-    public const string Pattern = @"^[A-Z][A-Za-z0-9+\-]{0,4}$";
+    public const string Pattern = @"^[A-Z][A-Za-z0-9+\-]{0,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

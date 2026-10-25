@@ -27,7 +27,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct BelgianIdentifier : IIsoSimpleValue<string>, IEquatable<BelgianIdentifier>
 {
     /// <summary>No externally verifiable format found — non-empty string only (see type remarks).</summary>
-    public const string Pattern = @"^.+$";
+    public const string Pattern = @"^.+\z";
 
     /// <inheritdoc/>
     public string Value { get; }

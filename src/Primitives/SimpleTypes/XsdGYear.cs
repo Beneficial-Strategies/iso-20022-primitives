@@ -27,7 +27,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdGYear : IIsoSimpleValue<int>, IIsoTimezoneQualifiedValue, IEquatable<XsdGYear>
 {
     /// <summary>Pattern for the non-timezone core of the lexical form: <c>-?\d{4,}</c>.</summary>
-    public const string CorePattern = @"^-?\d{4,}$";
+    public const string CorePattern = @"^-?\d{4,}\z";
 
     /// <inheritdoc/>
     public int Value { get; }

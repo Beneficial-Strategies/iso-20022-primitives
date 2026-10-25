@@ -36,6 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- the guard test of the standards reads the tests of the families, to see which types they name -->
+    <EmbeddedResource Include="Standards/*.cs" LogicalName="Standards/%(Filename)%(Extension)" />
     <EmbeddedResource Include="TestData/**/*.xml" />
   </ItemGroup>
 

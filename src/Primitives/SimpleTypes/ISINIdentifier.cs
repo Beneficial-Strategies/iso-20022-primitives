@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct ISINIdentifier : IIsoSimpleValue<string>, IEquatable<ISINIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[A-Z0-9]{12,12}$";
+    public const string Pattern = @"^[A-Z0-9]{12,12}\z";
 
     /// <inheritdoc/>
     public string Value { get; }
@@ -27,20 +27,23 @@ public readonly struct ISINIdentifier : IIsoSimpleValue<string>, IEquatable<ISIN
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.CheckDigitMismatch"/>
+    /// when it does but its check digits are wrong (ISO 6166, Luhn).
     /// </exception>
     public ISINIdentifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(ISINIdentifier), value, Pattern);
+        if (!CheckDigits.Isin(value))
+            throw Iso20022FormatException.ForCheckDigitMismatch(typeof(ISINIdentifier), value, "ISO 6166, Luhn");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and its check digits (ISO 6166, Luhn).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out ISINIdentifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.Isin(value))
         { result = new(value); return true; }
         result = default;
         return false;

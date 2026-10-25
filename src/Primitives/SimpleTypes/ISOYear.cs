@@ -30,7 +30,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct ISOYear : IIsoSimpleValue<int>, IIsoCompositeSimpleValue, IEquatable<ISOYear>
 {
     /// <summary>Pattern for the lexical form: exactly 4 digits.</summary>
-    public const string Pattern = @"^\d{4}$";
+    public const string Pattern = @"^\d{4}\z";
 
     /// <inheritdoc/>
     public int Value { get; }

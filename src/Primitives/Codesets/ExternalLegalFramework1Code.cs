@@ -22,7 +22,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ExternalLegalFramework1Code : IIsoExternalCode, IEquatable<ExternalLegalFramework1Code>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^.{1,6}$";
+    public const string Pattern = @"^.{1,6}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

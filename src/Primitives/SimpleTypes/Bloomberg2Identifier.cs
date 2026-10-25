@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct Bloomberg2Identifier : IIsoSimpleValue<string>, IEquatable<Bloomberg2Identifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^(BBG)[BCDFGHJKLMNPQRSTVWXYZ\d]{8}\d$";
+    public const string Pattern = @"^(BBG)[BCDFGHJKLMNPQRSTVWXYZ\d]{8}\d\z";
 
     /// <inheritdoc/>
     public string Value { get; }

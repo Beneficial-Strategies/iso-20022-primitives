@@ -18,7 +18,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct SicovamIdentifier : IIsoSimpleValue<string>, IEquatable<SicovamIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9]{5}$";
+    public const string Pattern = @"^[0-9]{5}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

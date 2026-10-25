@@ -18,7 +18,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct CountryCode : IIsoExternalCode, IEquatable<CountryCode>
 {
     /// <summary>ISO 20022 format constraint for this type (ISO 3166-1 alpha-2).</summary>
-    public const string Pattern = @"^[A-Z]{2}$";
+    public const string Pattern = @"^[A-Z]{2}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

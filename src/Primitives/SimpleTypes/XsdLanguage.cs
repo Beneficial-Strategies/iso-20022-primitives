@@ -22,7 +22,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdLanguage : IIsoSimpleValue<string>, IEquatable<XsdLanguage>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$";
+    public const string Pattern = @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z";
 
     /// <inheritdoc/>
     public string Value { get; }

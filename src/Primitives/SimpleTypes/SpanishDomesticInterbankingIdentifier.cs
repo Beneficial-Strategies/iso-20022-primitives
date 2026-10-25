@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct SpanishDomesticInterbankingIdentifier : IIsoSimpleValue<string>, IEquatable<SpanishDomesticInterbankingIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^ES[0-9]{8,9}$";
+    public const string Pattern = @"^ES[0-9]{8,9}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

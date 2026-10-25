@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct DateOffsetText : IIsoSimpleValue<string>, IEquatable<DateOffsetText>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^0|-1|-2$";
+    public const string Pattern = @"^(0|-1|-2)\z";
 
     /// <inheritdoc/>
     public string Value { get; }

@@ -26,7 +26,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct ExternalCashType1Code : IIsoExternalCode, IEquatable<ExternalCashType1Code>
 {
     /// <summary>ISO 20022 format constraint — 1 to 4 characters.</summary>
-    public const string Pattern = @"^.{1,4}$";
+    public const string Pattern = @"^.{1,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

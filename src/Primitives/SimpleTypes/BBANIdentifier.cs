@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct BBANIdentifier : IIsoSimpleValue<string>, IEquatable<BBANIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[a-zA-Z0-9]{1,30}$";
+    public const string Pattern = @"^[a-zA-Z0-9]{1,30}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

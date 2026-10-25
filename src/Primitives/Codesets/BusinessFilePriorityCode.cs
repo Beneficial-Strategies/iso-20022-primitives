@@ -22,7 +22,7 @@ namespace BeneficialStrategies.Iso20022.Codesets;
 public readonly struct BusinessFilePriorityCode : IIsoExternalCode, IEquatable<BusinessFilePriorityCode>
 {
     /// <summary>ISO 20022 format constraint for this external code set.</summary>
-    public const string Pattern = @"^.+$";
+    public const string Pattern = @"^.+\z";
 
     /// <inheritdoc/>
     public string Value { get; }

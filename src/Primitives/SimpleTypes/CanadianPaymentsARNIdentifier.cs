@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct CanadianPaymentsARNIdentifier : IIsoSimpleValue<string>, IEquatable<CanadianPaymentsARNIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^CA[0-9]{9,9}$";
+    public const string Pattern = @"^CA[0-9]{9,9}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

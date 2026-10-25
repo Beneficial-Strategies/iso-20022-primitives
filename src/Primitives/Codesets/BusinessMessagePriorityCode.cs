@@ -26,7 +26,7 @@ public readonly struct BusinessMessagePriorityCode
     : IIsoExternalCode, IEquatable<BusinessMessagePriorityCode>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[A-Z0-9]{1,4}$";
+    public const string Pattern = @"^[A-Z0-9]{1,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

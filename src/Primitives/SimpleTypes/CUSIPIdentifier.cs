@@ -44,10 +44,10 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct CUSIPIdentifier : IIsoSimpleValue<string>, IEquatable<CUSIPIdentifier>
 {
     /// <summary>Full-value format constraint: 8-character core + 1 numeric check digit.</summary>
-    public const string Pattern = @"^[A-Z0-9*@#]{8}[0-9]$";
+    public const string Pattern = @"^[A-Z0-9*@#]{8}[0-9]\z";
 
     /// <summary>Core-only format constraint (accepted for check-digit auto-generation — see the constructor).</summary>
-    private const string CorePattern = @"^[A-Z0-9*@#]{8}$";
+    private const string CorePattern = @"^[A-Z0-9*@#]{8}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

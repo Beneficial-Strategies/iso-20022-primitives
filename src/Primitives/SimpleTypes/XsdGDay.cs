@@ -26,7 +26,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdGDay : IIsoSimpleValue<byte>, IIsoTimezoneQualifiedValue, IEquatable<XsdGDay>
 {
     /// <summary>Pattern for the non-timezone core of the lexical form: <c>---DD</c>.</summary>
-    public const string CorePattern = @"^---(0[1-9]|[12]\d|3[01])$";
+    public const string CorePattern = @"^---(0[1-9]|[12]\d|3[01])\z";
 
     /// <inheritdoc/>
     public byte Value { get; }

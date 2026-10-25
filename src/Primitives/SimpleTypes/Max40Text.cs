@@ -34,9 +34,9 @@ public readonly struct Max40Text : IIsoSimpleValue<string>, IEquatable<Max40Text
     public Max40Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Max40Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Max40Text), value, MaxLength);
         Value = value;
     }
@@ -47,7 +47,7 @@ public readonly struct Max40Text : IIsoSimpleValue<string>, IEquatable<Max40Text
     /// </summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Max40Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         {
             result = new(value);
             return true;

@@ -57,7 +57,7 @@ Console.WriteLine(Max35Text.TryCreate("", out _));      // False: no exception, 
 ```csharp
 try { _ = new ActiveCurrencyCode("eur"); }
 catch (Iso20022FormatException ex) { Console.WriteLine(ex.Message); }
-// 'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}$
+// 'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}\z
 ```
 <!-- /snippet -->
 * **Amounts** are the currency-and-amount data types. Each refuses a value outside the limits of its ISO type: not negative, and at most so many digits in all and after the decimal point (18 and 5 for `ActiveCurrencyAndAmount`; trailing zeros do not count):

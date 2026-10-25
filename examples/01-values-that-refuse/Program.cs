@@ -22,7 +22,7 @@ Console.WriteLine(Max35Text.TryCreate("", out _));      // False: no exception, 
 // <snippet external-code>
 try { _ = new ActiveCurrencyCode("eur"); }
 catch (Iso20022FormatException ex) { Console.WriteLine(ex.Message); }
-// 'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}$
+// 'eur' is not a valid ActiveCurrencyCode. ISO 20022 pattern constraint: ^[A-Z]{3}\z
 // </snippet>
 
 // <snippet amount>

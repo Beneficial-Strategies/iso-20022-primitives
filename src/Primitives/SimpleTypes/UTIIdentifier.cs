@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct UTIIdentifier : IIsoSimpleValue<string>, IEquatable<UTIIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[A-Z0-9]{18}[0-9]{2}[A-Z0-9]{0,32}$";
+    public const string Pattern = @"^[A-Z0-9]{18}[0-9]{2}[A-Z0-9]{0,32}\z";
 
     /// <inheritdoc/>
     public string Value { get; }
@@ -27,20 +27,23 @@ public readonly struct UTIIdentifier : IIsoSimpleValue<string>, IEquatable<UTIId
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.CheckDigitMismatch"/>
+    /// when it does but its check digits are wrong (ISO 23897, the LEI it starts with).
     /// </exception>
     public UTIIdentifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(UTIIdentifier), value, Pattern);
+        if (!CheckDigits.UtiPrefix(value))
+            throw Iso20022FormatException.ForCheckDigitMismatch(typeof(UTIIdentifier), value, "ISO 23897, the LEI it starts with");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and its check digits (ISO 23897, the LEI it starts with).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out UTIIdentifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.UtiPrefix(value))
         { result = new(value); return true; }
         result = default;
         return false;

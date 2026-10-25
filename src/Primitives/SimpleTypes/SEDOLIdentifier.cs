@@ -43,10 +43,10 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct SEDOLIdentifier : IIsoSimpleValue<string>, IEquatable<SEDOLIdentifier>
 {
     /// <summary>Full-value format constraint: 6-character alphanumeric core + 1 numeric check digit.</summary>
-    public const string Pattern = @"^[A-Z0-9]{6}[0-9]$";
+    public const string Pattern = @"^[A-Z0-9]{6}[0-9]\z";
 
     /// <summary>Core-only format constraint (accepted for check-digit auto-generation — see the constructor).</summary>
-    private const string CorePattern = @"^[A-Z0-9]{6}$";
+    private const string CorePattern = @"^[A-Z0-9]{6}\z";
 
     private static readonly int[] Weights = [1, 3, 1, 7, 3, 9];
 

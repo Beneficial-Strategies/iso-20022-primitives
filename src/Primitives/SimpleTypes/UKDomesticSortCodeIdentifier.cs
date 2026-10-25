@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct UKDomesticSortCodeIdentifier : IIsoSimpleValue<string>, IEquatable<UKDomesticSortCodeIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^SC[0-9]{6,6}$";
+    public const string Pattern = @"^SC[0-9]{6,6}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

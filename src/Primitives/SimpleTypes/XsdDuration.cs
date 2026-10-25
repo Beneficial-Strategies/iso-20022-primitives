@@ -137,7 +137,7 @@ public readonly struct XsdDuration : IIsoSimpleValue<XsdDurationValue>, IIsoComp
     {
         var v = Value;
         if (v is { Years: 0, Months: 0, Days: 0, Hours: 0, Minutes: 0, Seconds: 0 })
-            return "P0D"; // canonical zero-duration form
+            return "PT0S"; // the canonical zero duration (W3C XML Schema 1.1); P0D is the same value
 
         var sb = new StringBuilder();
         if (v.IsNegative) sb.Append('-');

@@ -28,7 +28,7 @@ public readonly struct XsdGMonthDay
     : IIsoSimpleValue<(byte Month, byte Day)>, IIsoTimezoneQualifiedValue, IEquatable<XsdGMonthDay>
 {
     /// <summary>Pattern for the non-timezone core of the lexical form: <c>--MM-DD</c>.</summary>
-    public const string CorePattern = @"^--(0[1-9]|1[0-2])-(\d{2})$";
+    public const string CorePattern = @"^--(0[1-9]|1[0-2])-(\d{2})\z";
 
     /// <inheritdoc/>
     public (byte Month, byte Day) Value { get; }

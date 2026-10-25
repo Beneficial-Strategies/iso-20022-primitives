@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace BeneficialStrategies.Iso20022.SimpleTypes;
 
@@ -68,6 +69,8 @@ public readonly struct XsdFloat : IIsoSimpleValue<float>, IEquatable<XsdFloat>
         return false;
     }
 
+    private static readonly Regex LexicalForm = new(@"^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$", RegexOptions.CultureInvariant);
+
     private static bool TryParseWireFormat(string text, out float result)
     {
         switch (text)
@@ -82,6 +85,12 @@ public readonly struct XsdFloat : IIsoSimpleValue<float>, IEquatable<XsdFloat>
                 result = float.NaN;
                 return true;
             default:
+                // xs:float lexical space: a decimal with an optional exponent; the words of .NET ("Infinity", "nan") are not in it
+                if (!LexicalForm.IsMatch(text))
+                {
+                    result = default;
+                    return false;
+                }
                 return float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out result);
         }
     }
@@ -95,12 +104,36 @@ public readonly struct XsdFloat : IIsoSimpleValue<float>, IEquatable<XsdFloat>
     /// <summary>Implicitly unwraps to the wire string representation.</summary>
     public static implicit operator string(XsdFloat v) => v.ToString();
 
+    // .NET Core writes the shortest text that reads back as the same number; .NET Framework writes too few
+    // digits, so the text is tried at more digits until it does (#15)
+    private static string Shortest(float value)
+    {
+        string text = value.ToString(CultureInfo.InvariantCulture);
+        if (ReadsBackAs(text, value))
+            return text;
+        text = value.ToString("G8", CultureInfo.InvariantCulture);
+        return ReadsBackAs(text, value) ? text : value.ToString("G9", CultureInfo.InvariantCulture);
+    }
+
+    // .NET Framework throws for text that rounds to a value out of range, instead of returning false
+    private static bool ReadsBackAs(string text, float value)
+    {
+        try
+        {
+            return float.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture) == value;
+        }
+        catch (OverflowException)
+        {
+            return false;
+        }
+    }
+
     /// <inheritdoc/>
     public override string ToString() =>
         float.IsPositiveInfinity(Value) ? "INF"
         : float.IsNegativeInfinity(Value) ? "-INF"
         : float.IsNaN(Value) ? "NaN"
-        : Value.ToString(CultureInfo.InvariantCulture);
+        : Shortest(Value);
     /// <inheritdoc/>
     public bool Equals(XsdFloat other) => Value.Equals(other.Value);
     /// <inheritdoc/>

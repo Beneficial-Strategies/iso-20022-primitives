@@ -41,7 +41,7 @@ public readonly struct ISONormalisedDateTime : IIsoSimpleValue<DateTime>, IIsoCo
     /// Pattern for the non-"Z" core of the lexical form: <c>YYYY-MM-DDThh:mm:ss</c>, with an
     /// optional fractional-seconds suffix. Per ISO 8601 / W3C xs:dateTime.
     /// </summary>
-    public const string CorePattern = @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$";
+    public const string CorePattern = @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?\z";
 
     /// <inheritdoc/>
     public DateTime Value { get; }

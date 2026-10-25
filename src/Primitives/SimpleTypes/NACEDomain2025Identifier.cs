@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct NACEDomain2025Identifier : IIsoSimpleValue<string>, IEquatable<NACEDomain2025Identifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[A-V]{1,1}$";
+    public const string Pattern = @"^[A-V]{1,1}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

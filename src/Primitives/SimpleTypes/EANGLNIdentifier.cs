@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct EANGLNIdentifier : IIsoSimpleValue<string>, IEquatable<EANGLNIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[0-9]{13,13}$";
+    public const string Pattern = @"^[0-9]{13,13}\z";
 
     /// <inheritdoc/>
     public string Value { get; }
@@ -27,20 +27,23 @@ public readonly struct EANGLNIdentifier : IIsoSimpleValue<string>, IEquatable<EA
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.CheckDigitMismatch"/>
+    /// when it does but its check digits are wrong (GS1, modulus 10).
     /// </exception>
     public EANGLNIdentifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(EANGLNIdentifier), value, Pattern);
+        if (!CheckDigits.Gs1(value))
+            throw Iso20022FormatException.ForCheckDigitMismatch(typeof(EANGLNIdentifier), value, "GS1, modulus 10");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and its check digits (GS1, modulus 10).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out EANGLNIdentifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.Gs1(value))
         { result = new(value); return true; }
         result = default;
         return false;

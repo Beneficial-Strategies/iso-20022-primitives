@@ -52,7 +52,7 @@ public readonly struct ISODateTime : IIsoSimpleValue<DateTime>, IIsoTimezoneQual
     /// Pattern for the non-timezone core of the lexical form: <c>YYYY-MM-DDThh:mm:ss</c>, with an
     /// optional fractional-seconds suffix. Per ISO 8601 / W3C xs:dateTime.
     /// </summary>
-    public const string CorePattern = @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$";
+    public const string CorePattern = @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?\z";
 
     /// <inheritdoc/>
     public DateTime Value { get; }
@@ -66,6 +66,8 @@ public readonly struct ISODateTime : IIsoSimpleValue<DateTime>, IIsoTimezoneQual
         Value = value;
         TimezoneOffset = timezoneOffset;
     }
+
+    private static readonly Regex EndOfDay = new(@"T24:00:00(\.0+)?$", RegexOptions.CultureInvariant);
 
     /// <summary>
     /// Initializes by parsing the ISO 20022 ISODateTime lexical form: an ISO 8601 / W3C
@@ -89,9 +91,16 @@ public readonly struct ISODateTime : IIsoSimpleValue<DateTime>, IIsoTimezoneQual
         }
         if (!Regex.IsMatch(core, CorePattern))
             throw new Iso20022FormatException(typeof(ISODateTime), value, "ISO 8601 \"YYYY-MM-DDThh:mm:ss[.sss]\" with an optional timezone");
+        // 24:00:00 is the end of the day in xs:dateTime: the same instant as 00:00:00 of the next day, which is how it is read
+        bool endOfDay = EndOfDay.IsMatch(core);
+        if (endOfDay)
+            core = core.Substring(0, 11) + "00" + core.Substring(13);
         // the shape is right, but the date or time can still be impossible (hour 25, second 60)
-        if (!DateTime.TryParse(core, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
+        if (!DateTime.TryParse(core, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime)
+            || (endOfDay && dateTime.Date == DateTime.MaxValue.Date))
             throw new Iso20022FormatException(typeof(ISODateTime), value, "a date and time that exist: month 01-12, a day of that month, hours 00-23, minutes and seconds 00-59");
+        if (endOfDay)
+            dateTime = dateTime.AddDays(1);
         Value = dateTime;
         TimezoneOffset = tz;
     }

@@ -28,9 +28,9 @@ public readonly struct Min5Max8Text : IIsoSimpleValue<string>, IEquatable<Min5Ma
     public Min5Max8Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Min5Max8Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Min5Max8Text), value, MaxLength);
         Value = value;
     }
@@ -38,7 +38,7 @@ public readonly struct Min5Max8Text : IIsoSimpleValue<string>, IEquatable<Min5Ma
     /// <inheritdoc/>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Min5Max8Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

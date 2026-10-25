@@ -1306,10 +1306,10 @@ public abstract class SimpleValueXsdDurationContractTests<TStruct>
     }
 
     [Fact]
-    public void ToString_ZeroDuration_ReturnsCanonicalP0D()
+    public void ToString_ZeroDuration_ReturnsCanonicalPT0S()
     {
         var instance = (TStruct)StringCtor().Invoke(["PT0S"])!;
-        Assert.Equal("P0D", instance.ToString());
+        Assert.Equal("PT0S", instance.ToString());
     }
 
     [Fact]

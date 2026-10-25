@@ -19,7 +19,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct EntryTypeIdentifier : IIsoSimpleValue<string>, IEquatable<EntryTypeIdentifier>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^([BEOVW][0-9]{2}|DUM)$";
+    public const string Pattern = @"^([BEOVW][0-9]{2}|DUM)\z";
 
     /// <inheritdoc/>
     public string Value { get; }

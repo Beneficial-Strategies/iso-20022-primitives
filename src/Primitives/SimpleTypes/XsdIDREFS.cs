@@ -24,7 +24,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdIDREFS : IIsoSimpleValue<string>, IEquatable<XsdIDREFS>
 {
     /// <summary>One or more whitespace-separated xs:NCName-shaped tokens (see type remarks).</summary>
-    public const string Pattern = @"^[a-zA-Z_][a-zA-Z0-9_.\-]*(\s+[a-zA-Z_][a-zA-Z0-9_.\-]*)*$";
+    public const string Pattern = @"^[a-zA-Z_][a-zA-Z0-9_.\-]*(\s+[a-zA-Z_][a-zA-Z0-9_.\-]*)*\z";
 
     /// <inheritdoc/>
     public string Value { get; }

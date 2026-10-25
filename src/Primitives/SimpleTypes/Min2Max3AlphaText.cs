@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct Min2Max3AlphaText : IIsoSimpleValue<string>, IEquatable<Min2Max3AlphaText>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^[a-zA-Z]{2,3}$";
+    public const string Pattern = @"^[a-zA-Z]{2,3}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

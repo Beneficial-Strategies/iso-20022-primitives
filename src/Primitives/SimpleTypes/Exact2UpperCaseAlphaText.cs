@@ -34,9 +34,9 @@ public readonly struct Exact2UpperCaseAlphaText : IIsoSimpleValue<string>, IEqua
     public Exact2UpperCaseAlphaText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact2UpperCaseAlphaText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact2UpperCaseAlphaText), value, MaxLength);
         foreach (var c in value)
             if (c < 'A' || c > 'Z')
@@ -47,7 +47,7 @@ public readonly struct Exact2UpperCaseAlphaText : IIsoSimpleValue<string>, IEqua
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact2UpperCaseAlphaText result)
     {
-        if (value is { Length: 2 })
+        if (value is not null && value.CodePointCount() == 2)
         {
             foreach (var c in value)
                 if (c < 'A' || c > 'Z')

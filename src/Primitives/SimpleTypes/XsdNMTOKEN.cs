@@ -28,7 +28,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct XsdNMTOKEN : IIsoSimpleValue<string>, IEquatable<XsdNMTOKEN>
 {
     /// <summary>ASCII-range approximation of the xs:NMTOKEN lexical space (see type remarks).</summary>
-    public const string Pattern = @"^[a-zA-Z0-9_:.\-]+$";
+    public const string Pattern = @"^[a-zA-Z0-9_:.\-]+\z";
 
     /// <inheritdoc/>
     public string Value { get; }

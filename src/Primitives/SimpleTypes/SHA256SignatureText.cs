@@ -17,7 +17,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct SHA256SignatureText : IIsoSimpleValue<string>, IEquatable<SHA256SignatureText>
 {
     /// <summary>ISO 20022 format constraint for this type.</summary>
-    public const string Pattern = @"^([0-9A-F][0-9A-F]){32}$";
+    public const string Pattern = @"^([0-9A-F][0-9A-F]){32}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

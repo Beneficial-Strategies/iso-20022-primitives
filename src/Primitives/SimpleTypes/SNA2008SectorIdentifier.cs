@@ -31,7 +31,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct SNA2008SectorIdentifier : IIsoSimpleValue<string>, IEquatable<SNA2008SectorIdentifier>
 {
     /// <summary>"S" followed by 1-4 digits — confirmed shape, generous (not verified-exact) depth bound (see type remarks for source).</summary>
-    public const string Pattern = @"^S[0-9]{1,4}$";
+    public const string Pattern = @"^S[0-9]{1,4}\z";
 
     /// <inheritdoc/>
     public string Value { get; }

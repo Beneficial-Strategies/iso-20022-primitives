@@ -22,7 +22,7 @@ namespace BeneficialStrategies.Iso20022.SimpleTypes;
 public readonly struct RestrictedFINExact2Text : IIsoSimpleValue<string>, IEquatable<RestrictedFINExact2Text>
 {
     /// <summary>ISO 20022 pattern constraint — only "XX" or "TS" are valid.</summary>
-    public const string Pattern = @"^(XX|TS)$";
+    public const string Pattern = @"^(XX|TS)\z";
 
     /// <summary>The first valid value.</summary>
     public const string ValueXX = "XX";

@@ -34,9 +34,9 @@ public readonly struct Exact3UpperCaseAlphaNumericText : IIsoSimpleValue<string>
     public Exact3UpperCaseAlphaNumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact3UpperCaseAlphaNumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact3UpperCaseAlphaNumericText), value, MaxLength);
         foreach (var c in value)
             if (!((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
@@ -47,7 +47,7 @@ public readonly struct Exact3UpperCaseAlphaNumericText : IIsoSimpleValue<string>
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact3UpperCaseAlphaNumericText result)
     {
-        if (value is { Length: 3 })
+        if (value is not null && value.CodePointCount() == 3)
         {
             foreach (var c in value)
                 if (!((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))

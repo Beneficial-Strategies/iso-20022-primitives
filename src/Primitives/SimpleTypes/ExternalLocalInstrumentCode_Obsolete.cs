@@ -28,9 +28,9 @@ public readonly struct ExternalLocalInstrumentCode_Obsolete : IIsoSimpleValue<st
     public ExternalLocalInstrumentCode_Obsolete(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(ExternalLocalInstrumentCode_Obsolete), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(ExternalLocalInstrumentCode_Obsolete), value, MaxLength);
         Value = value;
     }
@@ -38,7 +38,7 @@ public readonly struct ExternalLocalInstrumentCode_Obsolete : IIsoSimpleValue<st
     /// <inheritdoc/>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out ExternalLocalInstrumentCode_Obsolete result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

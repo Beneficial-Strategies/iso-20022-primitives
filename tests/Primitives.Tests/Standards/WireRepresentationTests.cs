@@ -55,12 +55,17 @@ public class WireRepresentationTests
     [InlineData("ISODateTime", "2024-02-29T00:00:00", "2024-02-29T00:00:00")]
     [InlineData("ISODateTime", "0001-01-01T00:00:00", "0001-01-01T00:00:00")]
     [InlineData("ISODateTime", "9999-12-31T23:59:59", "9999-12-31T23:59:59")]
-    // the end of the day is 24:00:00 in xs:dateTime
-    [InlineData("ISODateTime", "2026-02-28T24:00:00", "2026-02-28T24:00:00", Skip = "#12: 24:00:00 is refused")]
+    // the end of the day is 24:00:00 in xs:dateTime; it is the same time as 00:00:00 of the next day, which is what is written
+    [InlineData("ISODateTime", "2026-02-28T24:00:00", "2026-03-01T00:00:00")]
     [InlineData("ISOTime", "12:00:00", "12:00:00")]
     [InlineData("ISOTime", "23:59:59.999", "23:59:59.999")]
     [InlineData("ISOTime", "12:00:00Z", "12:00:00Z")]
-    [InlineData("ISOTime", "24:00:00", "24:00:00", Skip = "#12: 24:00:00 is refused")]
+    [InlineData("ISOTime", "24:00:00Z", "00:00:00Z")]
+    [InlineData("ISOTime", "24:00:00", "00:00:00")]
+    [InlineData("ISODate", "2026-02-28", "2026-02-28")]
+    [InlineData("ISODate", "2024-02-29", "2024-02-29")]
+    [InlineData("ISODate", "0001-01-01", "0001-01-01")]
+    [InlineData("ISODate", "9999-12-31", "9999-12-31")]
     [InlineData("ISOYear", "2026", "2026")]
     [InlineData("ISOYear", "0001", "0001")]
     [InlineData("ISOYear", "9999", "9999")]
@@ -77,7 +82,7 @@ public class WireRepresentationTests
     [InlineData("XsdGMonthDay", "--12-31", "--12-31")]
     // xs:duration — PnYnMnDTnHnMnS, a negative sign, a fraction of a second
     [InlineData("XsdDuration", "P1Y2M3DT4H5M6S", "P1Y2M3DT4H5M6S")]
-    [InlineData("XsdDuration", "PT0S", "PT0S", Skip = "#13: a zero duration is written P0D, not the canonical PT0S")]
+    [InlineData("XsdDuration", "PT0S", "PT0S")]
     [InlineData("XsdDuration", "P1D", "P1D")]
     [InlineData("XsdDuration", "-P1D", "-P1D")]
     [InlineData("XsdDuration", "PT1.5S", "PT1.5S")]
@@ -136,15 +141,15 @@ public class WireRepresentationTests
     [InlineData("XsdNonNegativeInteger", "-1")]
     [InlineData("XsdNonPositiveInteger", "1")]
     // the special values are INF, -INF and NaN, and only those spellings
-    [InlineData("XsdDouble", "Infinity", Skip = "#11: Infinity is accepted")]
+    [InlineData("XsdDouble", "Infinity")]
     [InlineData("XsdDouble", "inf")]
     [InlineData("XsdDouble", "+INF")]
-    [InlineData("XsdDouble", "nan", Skip = "#11: nan is accepted")]
+    [InlineData("XsdDouble", "nan")]
     [InlineData("XsdDouble", "1,5")]
-    [InlineData("XsdFloat", "Infinity", Skip = "#11: Infinity is accepted")]
+    [InlineData("XsdFloat", "Infinity")]
     [InlineData("XsdFloat", "inf")]
     [InlineData("XsdFloat", "+INF")]
-    [InlineData("XsdFloat", "nan", Skip = "#11: nan is accepted")]
+    [InlineData("XsdFloat", "nan")]
     // dates and times
     [InlineData("ISODateTime", "2026-02-29T00:00:00")]
     [InlineData("ISODateTime", "2026-13-01T00:00:00")]
@@ -163,6 +168,15 @@ public class WireRepresentationTests
     [InlineData("ISOTime", "24:00:01")]
     [InlineData("ISOTime", "12:60:00")]
     [InlineData("ISOTime", "12:00")]
+    [InlineData("ISODate", "2026-02-29")]
+    [InlineData("ISODate", "1900-02-29")]
+    [InlineData("ISODate", "2026-13-01")]
+    [InlineData("ISODate", "2026-00-10")]
+    [InlineData("ISODate", "2026-04-31")]
+    [InlineData("ISODate", "2026-2-28")]
+    [InlineData("ISODate", "20260228")]
+    [InlineData("ISODate", "28-02-2026")]
+    [InlineData("ISODate", "2026-02-28T00:00:00")]
     [InlineData("ISOYear", "26")]
     [InlineData("ISOYear", "10000")]
     [InlineData("ISOYearMonth", "2026-13")]
@@ -265,12 +279,8 @@ public class WireRepresentationTests
         Assert.Equal(written, StandardsVectors.Canonical(type, written!));
     }
 
-    // the largest double needs 17 digits; .NET Framework writes 15 (#15)
-#if NET48
-    [Fact(Skip = "#15: XsdDouble writes 15 digits on .NET Framework")]
-#else
+    // the largest double needs 17 digits; .NET Framework writes 15 unless the text is checked (#15)
     [Fact]
-#endif
     public void RoundTrips_TheLargestDouble()
     {
         var written = StandardsVectors.Canonical("XsdDouble", "1.7976931348623157E+308");
