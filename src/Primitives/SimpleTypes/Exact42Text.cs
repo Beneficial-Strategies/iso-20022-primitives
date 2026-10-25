@@ -33,9 +33,9 @@ public readonly struct Exact42Text : IIsoSimpleValue<string>, IEquatable<Exact42
     public Exact42Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact42Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact42Text), value, MaxLength);
         Value = value;
     }
@@ -43,7 +43,7 @@ public readonly struct Exact42Text : IIsoSimpleValue<string>, IEquatable<Exact42
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> is exactly 42 characters.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact42Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

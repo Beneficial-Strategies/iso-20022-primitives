@@ -34,9 +34,9 @@ public readonly struct Exact32AlphaNumericText : IIsoSimpleValue<string>, IEquat
     public Exact32AlphaNumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact32AlphaNumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact32AlphaNumericText), value, MaxLength);
         foreach (var c in value)
             if (c is (< '0' or > '9') and (< 'a' or > 'z') and (< 'A' or > 'Z'))
@@ -47,7 +47,7 @@ public readonly struct Exact32AlphaNumericText : IIsoSimpleValue<string>, IEquat
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact32AlphaNumericText result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (c is (< '0' or > '9') and (< 'a' or > 'z') and (< 'A' or > 'Z'))

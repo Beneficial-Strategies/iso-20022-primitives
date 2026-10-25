@@ -33,9 +33,9 @@ public readonly struct Exact10Text : IIsoSimpleValue<string>, IEquatable<Exact10
     public Exact10Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact10Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact10Text), value, MaxLength);
         Value = value;
     }
@@ -43,7 +43,7 @@ public readonly struct Exact10Text : IIsoSimpleValue<string>, IEquatable<Exact10
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> is exactly 10 characters.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact10Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

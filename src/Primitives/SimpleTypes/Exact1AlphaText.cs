@@ -34,9 +34,9 @@ public readonly struct Exact1AlphaText : IIsoSimpleValue<string>, IEquatable<Exa
     public Exact1AlphaText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact1AlphaText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact1AlphaText), value, MaxLength);
         var c = value[0];
         if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
@@ -47,7 +47,7 @@ public readonly struct Exact1AlphaText : IIsoSimpleValue<string>, IEquatable<Exa
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact1AlphaText result)
     {
-        if (value is { Length: 1 })
+        if (value is not null && value.CodePointCount() == 1)
         {
             var c = value[0];
             if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))

@@ -28,9 +28,9 @@ public readonly struct Max10KText : IIsoSimpleValue<string>, IEquatable<Max10KTe
     public Max10KText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Max10KText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Max10KText), value, MaxLength);
         Value = value;
     }
@@ -38,7 +38,7 @@ public readonly struct Max10KText : IIsoSimpleValue<string>, IEquatable<Max10KTe
     /// <inheritdoc/>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Max10KText result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

@@ -28,9 +28,9 @@ public readonly struct Extended350Code : IIsoSimpleValue<string>, IEquatable<Ext
     public Extended350Code(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Extended350Code), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Extended350Code), value, MaxLength);
         Value = value;
     }
@@ -38,7 +38,7 @@ public readonly struct Extended350Code : IIsoSimpleValue<string>, IEquatable<Ext
     /// <inheritdoc/>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Extended350Code result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

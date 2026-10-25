@@ -38,9 +38,9 @@ public readonly struct Exact6AlphaNumericText : IIsoSimpleValue<string>, IEquata
     public Exact6AlphaNumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact6AlphaNumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact6AlphaNumericText), value, MaxLength);
         foreach (var c in value)
             if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || char.IsWhiteSpace(c)))
@@ -51,7 +51,7 @@ public readonly struct Exact6AlphaNumericText : IIsoSimpleValue<string>, IEquata
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact6AlphaNumericText result)
     {
-        if (value is { Length: 6 })
+        if (value is not null && value.CodePointCount() == 6)
         {
             foreach (var c in value)
                 if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || char.IsWhiteSpace(c)))

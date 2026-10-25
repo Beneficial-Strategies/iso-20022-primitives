@@ -33,9 +33,9 @@ public readonly struct RestrictedFINMax31Text : IIsoSimpleValue<string>, IEquata
     public RestrictedFINMax31Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINMax31Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINMax31Text), value, MaxLength);
         Value = value;
     }
@@ -43,7 +43,7 @@ public readonly struct RestrictedFINMax31Text : IIsoSimpleValue<string>, IEquata
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies the length constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINMax31Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

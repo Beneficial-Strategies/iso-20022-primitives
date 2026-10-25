@@ -34,9 +34,9 @@ public readonly struct Max280Text : IIsoSimpleValue<string>, IEquatable<Max280Te
     public Max280Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Max280Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Max280Text), value, MaxLength);
         Value = value;
     }
@@ -47,7 +47,7 @@ public readonly struct Max280Text : IIsoSimpleValue<string>, IEquatable<Max280Te
     /// </summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Max280Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         {
             result = new(value);
             return true;

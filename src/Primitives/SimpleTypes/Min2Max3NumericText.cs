@@ -34,9 +34,9 @@ public readonly struct Min2Max3NumericText : IIsoSimpleValue<string>, IEquatable
     public Min2Max3NumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Min2Max3NumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Min2Max3NumericText), value, MaxLength);
         foreach (var c in value)
             if (c < '0' || c > '9')
@@ -47,7 +47,7 @@ public readonly struct Min2Max3NumericText : IIsoSimpleValue<string>, IEquatable
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Min2Max3NumericText result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (c < '0' || c > '9')

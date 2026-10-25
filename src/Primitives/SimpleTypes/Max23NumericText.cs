@@ -34,9 +34,9 @@ public readonly struct Max23NumericText : IIsoSimpleValue<string>, IEquatable<Ma
     public Max23NumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Max23NumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Max23NumericText), value, MaxLength);
         foreach (var c in value)
             if (c < '0' || c > '9')
@@ -47,7 +47,7 @@ public readonly struct Max23NumericText : IIsoSimpleValue<string>, IEquatable<Ma
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Max23NumericText result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (c < '0' || c > '9')

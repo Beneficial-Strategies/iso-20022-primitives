@@ -34,9 +34,9 @@ public readonly struct Max8NumericText : IIsoSimpleValue<string>, IEquatable<Max
     public Max8NumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Max8NumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Max8NumericText), value, MaxLength);
         foreach (var c in value)
             if (c < '0' || c > '9')
@@ -47,7 +47,7 @@ public readonly struct Max8NumericText : IIsoSimpleValue<string>, IEquatable<Max
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Max8NumericText result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (c < '0' || c > '9')

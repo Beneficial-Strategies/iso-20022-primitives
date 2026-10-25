@@ -28,9 +28,9 @@ public readonly struct Min3Max4Text : IIsoSimpleValue<string>, IEquatable<Min3Ma
     public Min3Max4Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Min3Max4Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Min3Max4Text), value, MaxLength);
         Value = value;
     }
@@ -38,7 +38,7 @@ public readonly struct Min3Max4Text : IIsoSimpleValue<string>, IEquatable<Min3Ma
     /// <inheritdoc/>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Min3Max4Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

@@ -43,9 +43,9 @@ public readonly struct RestrictedFINXMax350Text : IIsoSimpleValue<string>, IEqua
     public RestrictedFINXMax350Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINXMax350Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINXMax350Text), value, MaxLength);
         foreach (var c in value)
             if (!IsCharSetXWithNewlines(c))
@@ -56,7 +56,7 @@ public readonly struct RestrictedFINXMax350Text : IIsoSimpleValue<string>, IEqua
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINXMax350Text result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (!IsCharSetXWithNewlines(c))

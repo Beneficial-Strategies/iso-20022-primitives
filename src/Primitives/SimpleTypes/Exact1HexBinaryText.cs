@@ -67,7 +67,7 @@ public readonly struct Exact1HexBinaryText : IIsoSimpleValue<string>, IEquatable
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact1HexBinaryText result)
     {
-        if (value is { Length: 2 })
+        if (value is not null && value.CodePointCount() == 2)
         {
             foreach (var c in value)
                 if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))

@@ -33,9 +33,9 @@ public readonly struct Exact1Text : IIsoSimpleValue<string>, IEquatable<Exact1Te
     public Exact1Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact1Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact1Text), value, MaxLength);
         Value = value;
     }
@@ -43,7 +43,7 @@ public readonly struct Exact1Text : IIsoSimpleValue<string>, IEquatable<Exact1Te
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> is exactly 1 character.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact1Text result)
     {
-        if (value is { Length: >= MinLength and <= MaxLength })
+        if (value is not null && value.CodePointCount() is >= MinLength and <= MaxLength)
         { result = new(value); return true; }
         result = default;
         return false;

@@ -34,9 +34,9 @@ public readonly struct Max4AlphaNumericText : IIsoSimpleValue<string>, IEquatabl
     public Max4AlphaNumericText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Max4AlphaNumericText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Max4AlphaNumericText), value, MaxLength);
         foreach (var c in value)
             if (c is (< '0' or > '9') and (< 'a' or > 'z') and (< 'A' or > 'Z'))
@@ -47,7 +47,7 @@ public readonly struct Max4AlphaNumericText : IIsoSimpleValue<string>, IEquatabl
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Max4AlphaNumericText result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (c is (< '0' or > '9') and (< 'a' or > 'z') and (< 'A' or > 'Z'))

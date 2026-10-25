@@ -26,7 +26,7 @@ public readonly struct RestrictedFINZMax8000Text : IIsoSimpleValue<string>, IEqu
     public const int MaxLength = 8000;
 
     /// <summary>ISO 20022 allowed character set Z (superset of X, adds ! % &amp; * ; &lt; &gt; = @ # { - _).</summary>
-    public const string AllowedCharacters = @"0-9 a-z A-Z ! % & * ; < > SPACE . , ( ) \n \r / = ' + : ? @ # { - _";
+    public const string AllowedCharacters = @"0-9 a-z A-Z ! "" % & * ; < > SPACE . , ( ) \n \r / = ' + : ? @ # { - _";
 
     /// <inheritdoc/>
     public string Value { get; }
@@ -41,9 +41,9 @@ public readonly struct RestrictedFINZMax8000Text : IIsoSimpleValue<string>, IEqu
     public RestrictedFINZMax8000Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINZMax8000Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINZMax8000Text), value, MaxLength);
         foreach (var c in value)
             if (!IsCharSetZ(c))
@@ -54,7 +54,7 @@ public readonly struct RestrictedFINZMax8000Text : IIsoSimpleValue<string>, IEqu
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINZMax8000Text result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (!IsCharSetZ(c))

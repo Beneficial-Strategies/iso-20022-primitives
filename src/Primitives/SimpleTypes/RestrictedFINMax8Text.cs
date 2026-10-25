@@ -36,9 +36,9 @@ public readonly struct RestrictedFINMax8Text : IIsoSimpleValue<string>, IEquatab
     public RestrictedFINMax8Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINMax8Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINMax8Text), value, MaxLength);
         ValidateSlash(typeof(RestrictedFINMax8Text), value);
         Value = value;
@@ -47,7 +47,7 @@ public readonly struct RestrictedFINMax8Text : IIsoSimpleValue<string>, IEquatab
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINMax8Text result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength
             && value[0] != '/' && value[^1] != '/' && !value.Contains("//"))
         { result = new(value); return true; }
         result = default;

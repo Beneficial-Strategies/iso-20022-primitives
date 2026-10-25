@@ -40,9 +40,9 @@ public readonly struct RestrictedFINXMax16Text : IIsoSimpleValue<string>, IEquat
     public RestrictedFINXMax16Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINXMax16Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINXMax16Text), value, MaxLength);
         foreach (var c in value)
             if (!IsCharSetX(c))
@@ -62,7 +62,7 @@ public readonly struct RestrictedFINXMax16Text : IIsoSimpleValue<string>, IEquat
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINXMax16Text result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (!IsCharSetX(c))

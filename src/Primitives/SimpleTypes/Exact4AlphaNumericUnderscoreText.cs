@@ -34,9 +34,9 @@ public readonly struct Exact4AlphaNumericUnderscoreText : IIsoSimpleValue<string
     public Exact4AlphaNumericUnderscoreText(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(Exact4AlphaNumericUnderscoreText), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(Exact4AlphaNumericUnderscoreText), value, MaxLength);
         var first = value[0];
         if (!((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z') || (first >= '0' && first <= '9')))
@@ -55,7 +55,7 @@ public readonly struct Exact4AlphaNumericUnderscoreText : IIsoSimpleValue<string
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out Exact4AlphaNumericUnderscoreText result)
     {
-        if (value is { Length: 4 })
+        if (value is not null && value.CodePointCount() == 4)
         {
             var first = value[0];
             if ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z') || (first >= '0' && first <= '9'))

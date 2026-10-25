@@ -37,9 +37,9 @@ public readonly struct RestrictedFINXMax8Text : IIsoSimpleValue<string>, IEquata
     public RestrictedFINXMax8Text(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        if (value.Length < MinLength)
+        if (value.CodePointCount() < MinLength)
             throw Iso20022FormatException.ForTooShort(typeof(RestrictedFINXMax8Text), value, MinLength);
-        if (value.Length > MaxLength)
+        if (value.CodePointCount() > MaxLength)
             throw Iso20022FormatException.ForTooLong(typeof(RestrictedFINXMax8Text), value, MaxLength);
         foreach (var c in value)
             if (!IsCharSetX(c))
@@ -50,7 +50,7 @@ public readonly struct RestrictedFINXMax8Text : IIsoSimpleValue<string>, IEquata
     /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies all constraints.</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out RestrictedFINXMax8Text result)
     {
-        if (value is not null && value.Length >= MinLength && value.Length <= MaxLength)
+        if (value is not null && value.CodePointCount() >= MinLength && value.CodePointCount() <= MaxLength)
         {
             foreach (var c in value)
                 if (!IsCharSetX(c))
