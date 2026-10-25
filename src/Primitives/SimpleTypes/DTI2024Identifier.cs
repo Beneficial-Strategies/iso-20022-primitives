@@ -27,20 +27,23 @@ public readonly struct DTI2024Identifier : IIsoSimpleValue<string>, IEquatable<D
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     /// <exception cref="Iso20022FormatException">
     /// Thrown with <see cref="Iso20022FormatViolation.PatternMismatch"/> when the value
-    /// does not satisfy <see cref="Pattern"/>.
+    /// does not satisfy <see cref="Pattern"/>, or with <see cref="Iso20022FormatViolation.CheckDigitMismatch"/>
+    /// when it does but its ninth character is not the ISO 24165 check character of the first eight.
     /// </exception>
     public DTI2024Identifier(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
         if (!Regex.IsMatch(value, Pattern))
             throw new Iso20022FormatException(typeof(DTI2024Identifier), value, Pattern);
+        if (!CheckDigits.Dti(value))
+            throw Iso20022FormatException.ForCheckDigitMismatch(typeof(DTI2024Identifier), value, "ISO 24165, MOD 31,30");
         Value = value;
     }
 
-    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/>.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="value"/> satisfies <see cref="Pattern"/> and its check character (ISO 24165).</summary>
     public static bool TryCreate(string? value, [NotNullWhen(true)] out DTI2024Identifier result)
     {
-        if (value is not null && Regex.IsMatch(value, Pattern))
+        if (value is not null && Regex.IsMatch(value, Pattern) && CheckDigits.Dti(value))
         { result = new(value); return true; }
         result = default;
         return false;

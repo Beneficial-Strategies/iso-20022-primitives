@@ -91,4 +91,32 @@ internal static class CheckDigits
 
     /// <summary>ISO 10962: the first letter of a CFI is one of the fourteen categories.</summary>
     public static bool CfiCategory(string cfi) => cfi.Length > 0 && "CDEFHIJKLMORST".IndexOf(cfi[0]) >= 0;
+
+    private const string DtiAlphabet = "0123456789BCDFGHJKLMNPQRSTVWXZ";
+
+    /// <summary>
+    /// ISO 24165: the ninth character is the ISO 7064 hybrid system MOD 31,30 check character of the first eight,
+    /// over the alphabet of digits and consonants without Y (30 symbols). One registered identifier, the
+    /// first one (Bitcoin), was issued before the rule and keeps its own check character.
+    /// </summary>
+    public static bool Dti(string dti)
+    {
+        if (dti.Length != 9)
+            return false;
+        string core = dti.Substring(0, 8);
+        if (core == "4H95J0R2")
+            return dti[8] == 'X';
+        int product = 30;
+        foreach (char c in core)
+        {
+            int value = DtiAlphabet.IndexOf(c);
+            if (value < 0)
+                return false;
+            int sum = (product + value) % 30;
+            if (sum == 0)
+                sum = 30;
+            product = sum * 2 % 31;
+        }
+        return DtiAlphabet[(31 - product) % 30] == dti[8];
+    }
 }
