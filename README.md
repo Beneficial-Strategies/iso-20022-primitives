@@ -171,7 +171,7 @@ It has no message definitions and depends on no other package; every other packa
 | You want | Package |
 |---|---|
 | the shape of every ISO 20022 message, component and choice, so a class of yours can stand in for one | [BeneficialStrategies.Iso20022.Messages](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Messages) |
-| a ready-made class for every message | [BeneficialStrategies.Iso20022](https://www.nuget.org/packages/BeneficialStrategies.Iso20022) (depends on this package; same namespaces) |
+| a ready-made class for every message | [BeneficialStrategies.Iso20022.Messages.Records](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Messages.Records) (depends on this package; same namespaces) |
 | the rules the types cannot express, as FluentValidation validators | [BeneficialStrategies.Iso20022.Messages.Validation](https://www.nuget.org/packages/BeneficialStrategies.Iso20022.Messages.Validation) |
 
 ### Frameworks
